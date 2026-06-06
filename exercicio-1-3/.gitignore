@@ -1,0 +1,5 @@
+.env
+avaliacao/
+chroma_data/
+documents/
+__pycache__/
