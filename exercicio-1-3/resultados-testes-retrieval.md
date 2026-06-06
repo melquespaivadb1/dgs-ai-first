@@ -38,6 +38,17 @@
 
 A seção primária (3.1 Prazo geral) foi recuperada com bom score. As seções 3.3 e 3.5 complementam a resposta com procedimento e custos. O único ruído é o Chunk 5 (FAQ, Item 3), que é temáticamente adjacente (devolução), mas trata de carga perigosa — irrelevante para a pergunta. Por ter prioridade 3, o LLM tende a ignorá-lo corretamente.
 
+**Resposta Claude Chat**
+
+O prazo para solicitação de devolução é de 7 (sete) dias úteis contados a partir da data de recebimento confirmada no sistema de tracking.O prazo para solicitação de devolução é de 7 (sete) dias úteis contados a partir da data de recebimento confirmada no sistema de tracking. A contagem exclui sábados, domingos e feriados nacionais.
+
+Solicitações feitas após esse prazo não são elegíveis para devolução pelo processo padrão e devem ser encaminhadas ao Comercial para negociação caso a caso.
+📋 Fonte(s):
+
+POL-001, 3. Regras de Devolução > 3.1. Prazo geral; POL-001, 3. Regras de Devolução > 3.5. Custos de devolução
+
+*Resposta satisfatório. O chunk considerado como ruído não foi utilizado como fonte da resposta o que é bom.*
+
 ---
 
 ### P2 — "Posso devolver carga perigosa?"
@@ -57,6 +68,19 @@ A seção primária (3.1 Prazo geral) foi recuperada com bom score. As seções 
 O chunk oficial mais relevante (POL-001 seção 3.2, que lista a exceção para cargas perigosas) foi recuperado, mas aparece em último lugar (rank 5). O FAQ domina os primeiros 4 resultados — dois deles com ruído (itens 22 e 38, sobre seguro e carga danificada, sem relação direta com devolução de carga perigosa).
 
 O risco prático é que o LLM, ao ler os chunks em ordem, pode dar peso excessivo ao FAQ (prioridade 3) antes de chegar ao POL-001. O system prompt instrui a hierarquia de fontes, mas a posição do chunk na lista pode influenciar o comportamento.
+
+**Resposta do Claude Chat**
+Cargas perigosas classificadas nas classes 1 a 6 da ANTT não são elegíveis para devolução pelo processo padrão. Isso inclui explosivos (classe 1), gases (classe 2), líquidos inflamáveis (classe 3), sólidos inflamáveis (classe 4), oxidantes e peróxidos (classe 5), e substâncias tóxicas e infectantes (classe 6), conforme a Resolução ANTT nº 5.947/2021.
+
+Caso o cliente solicite uma exceção, oriente-o a entrar em contato com a Gestão de Riscos (ramal 4500), pois já houve casos de autorização especial por essa área.
+
+📋 Fonte(s):
+POL-001, seção 3.2 — Exceções ao prazo geral (fonte primária)
+FAQ-atendimento, Item 3 — "Cliente perguntou se pode devolver carga perigosa. O que respondo?" (fonte complementar sobre procedimento de exceção)
+
+⚠️ Observação: A informação sobre possibilidade de exceção via Gestão de Riscos provém do FAQ-atendimento (wiki interna), fonte de prioridade inferior à política oficial. Recomenda-se confirmar o procedimento de exceção com o supervisor ou a própria equipe de Gestão de Riscos antes de orientar o cliente.
+
+*Resposta foi satisfatória com menção ao principal chunk POL-001 seção 3.2*
 
 ---
 
@@ -78,6 +102,23 @@ A seção `2. Tabela de SLAs` — que contém os valores concretos de prazo por 
 
 Os chunks recuperados incluem a classificação de clientes (critérios de elegibilidade) e medição de reportes, mas não os SLAs em si. Com esse contexto, o LLM não conseguirá responder a pergunta com os valores corretos.
 
+**Resposta Claude Chat**
+
+Cliente Gold tem os seguintes SLAs:Cliente Gold tem os seguintes SLAs:
+
+- Resposta: até 2 horas
+- Resolução: até 24 horas
+- Para incidentes críticos, os prazos são menores — consulte a tabela SLA-2024 para os valores específicos.
+
+O relógio de SLA não pausa fora do horário comercial para incidentes críticos de clientes Gold. Para chamados gerais, o SLA pausa fora do horário comercial (08h–18h, dias úteis).
+
+📋 Fonte(s):
+FAQ-atendimento, Item 41; SLA-2024, seção 5 — Medição e reportes
+
+⚠️ Observação: Os prazos para incidentes críticos não estão detalhados nos chunks recuperados. Consulte diretamente a tabela SLA-2024 ou escale para o supervisor caso precise desses valores.
+
+*A avaliação se mostrou acertiva. O fato de não recuperarmos a tabela na fase de retrieve, faz com que o modelo não consiga responder sobre incidentes críticos. Ao menos a resposta, por conta do system prompt, reconhece isso no campo de observação. Mas ainda assim, o usuário precisaria realizar outra pergunta para ter uma resposta completa*
+
 ---
 
 ### P4 — "Qual o SLA do cliente Platinum?"
@@ -95,6 +136,19 @@ Os chunks recuperados incluem a classificação de clientes (critérios de elegi
 **Avaliação: ✅ Aprovado**
 
 Os dois chunks essenciais para uma boa resposta estão presentes: o FAQ Item 15 (que esclarece que Platinum não existe e orienta sobre os tiers reais) e a seção 1 do SLA-2024 (que declara explicitamente "Não existem outros tiers além dos três listados acima"). O LLM tem contexto suficiente para responder corretamente.
+
+**Resposta Claude Chat**
+
+Não existe o tier Platinum na NovaTech.Não existe o tier Platinum na NovaTech. Os únicos tiers reconhecidos são Gold, Silver e Standard.
+Se o cliente afirma ser Platinum, é provável que esteja confundindo com outra transportadora ou com um programa de fidelidade antigo descontinuado em 2022. Solicite o número do contrato para verificar o tier correto.
+Caso o cliente solicite um SLA diferenciado fora desses três tiers, a orientação é encaminhar ao Comercial para análise de viabilidade.
+
+📋 Fonte(s):
+
+FAQ-atendimento, Item 15
+SLA-2024, seção 1 — Classificação de clientes
+
+*Resposta satisfatória, realmente indicando que o tier platinum não existe*
 
 ---
 
@@ -115,6 +169,25 @@ Os dois chunks essenciais para uma boa resposta estão presentes: o FAQ Item 15 
 O retrieval funcionou — ambas as versões da PROC-042 foram recuperadas, inclusive as seções de fórmula de cálculo de ambas. O problema está na etapa de geração: v1 e v2 têm a **mesma prioridade de fonte (1)**, portanto a hierarquia do system prompt não consegue desempatar automaticamente.
 
 Os scores são muito próximos (1.05–1.09), e os multiplicadores regionais diferem entre versões (ex.: Região Norte: 1.6 na v1 vs. 1.8 na v2). O LLM precisará usar a data de emissão dos documentos (v1: 03/03/2023; v2: 10/11/2023) como critério de desempate — comportamento que depende do raciocínio do modelo, não de regra explícita no system prompt.
+
+**Resposta Claude Chat**
+
+Para uma carga de 600kg com destino a Manaus (Região Norte), aplica-se a seguinte fórmula:Para uma carga de 600kg com destino a Manaus (Região Norte), aplica-se a seguinte fórmula:
+Valor do frete = Valor base × Multiplicador regional × Fator de peso
+
+Valor base: tarifa publicada na tabela mensal de fretes (consultar tabela vigente)
+Multiplicador regional (Norte): 1,8
+Fator de peso (500kg a 1.000kg): 1,0
+
+Exemplo: se o valor base for R$ 1.000,00 → Frete = R$ 1.000,00 × 1,8 × 1,0 = R$ 1.800,00
+
+📋 Fonte(s):
+PROC-042-v2, seção 2. Fórmula de cálculo (fator de peso e fórmula)
+PROC-042-v2, seção 2.1 — multiplicador regional Norte: 1,8 (conforme mencionado no contexto geral da v2)
+
+⚠️ Observação: Foram identificadas duas versões do procedimento (v1 e v2). Foi utilizada a v2, que prevalece por ser a versão mais recente. O valor base deve ser obtido na tabela mensal de fretes vigente — sem esse dado, não é possível calcular o valor final. Caso o cliente acumule 8 ou mais fretes especiais/mês, pode haver desconto de 5% sobre o multiplicador (a partir de 15 fretes/mês, 10%) — consulte PROC-042-v2, seção 4.
+
+*A preocupação da análise se mostrou válida. Contudo o claude chat, utilizando o modelo Sonnet 4.6 foi capaz de reconhecer qual era a versão mais atualizada e utiliza-la, dando assim, uma resposta correta.*
 
 ---
 
