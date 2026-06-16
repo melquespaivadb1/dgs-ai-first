@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "deny": [
+      "mcp__fs-docs__write_file",
+      "mcp__fs-docs__edit_file",
+      "mcp__fs-docs__create_directory",
+      "mcp__fs-docs__move_file",
+      "mcp__fs-corpus__write_file",
+      "mcp__fs-corpus__edit_file",
+      "mcp__fs-corpus__create_directory",
+      "mcp__fs-corpus__move_file"
+    ]
+  }
+}

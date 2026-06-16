@@ -1,0 +1,56 @@
+{
+  "_comment": "Least-privilege MCP config. fs-docs e fs-corpus são somente leitura via dois mecanismos complementares: (1) escopo de diretório restrito — o server não enxerga nenhuma pasta fora do argumento passado; (2) write tools desabilitadas em .claude/settings.json para essas instâncias, pois @modelcontextprotocol/server-filesystem não possui flag --readonly nativa sem Docker.",
+
+  "mcpServers": {
+
+    "fs-code": {
+      "_comment": "Escopo mínimo para geração e edição de artefatos do projeto. Inclui src/, specs/, skills/, tests/ e prompts/ — as únicas pastas onde o agente precisa criar ou modificar arquivos. docs/, data/ e infra/ ficam de fora deliberadamente.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "src",
+        "specs",
+        "skills",
+        "tests",
+        "prompts"
+      ]
+    },
+
+    "fs-docs": {
+      "_comment": "Acesso restrito a docs/novatech/ — documentação canônica de negócio da NovaTech. Nenhuma outra pasta é visível. Write tools são bloqueadas em .claude/settings.json (veja abaixo). A pasta docs/adr/ e docs/runbooks/ ficam fora: o agente de RAG não precisa de ADRs nem runbooks para responder perguntas de negócio.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "docs/novatech"
+      ]
+    },
+
+    "fs-corpus": {
+      "_comment": "Acesso restrito a data/retrieval-corpus/ — chunks pré-processados para recuperação. Nenhuma outra subpasta de data/ é exposta. Write tools bloqueadas em .claude/settings.json. O pipeline de ingestão que grava os chunks roda via fs-code, não via esta instância.",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "data/retrieval-corpus"
+      ]
+    },
+
+    "git": {
+      "_comment": "Raiz do repositório como escopo mínimo necessário para git_log, git_diff e git_branch. O server git não aceita escopo por subpasta — o repositório é a unidade atômica. Tools de escrita (git_commit, git_add) existem no server mas devem ser usadas apenas pelo fluxo de CI; considere desabilitá-las em settings.json para ambientes de revisão.",
+      "command": "uvx",
+      "args": ["mcp-server-git", "--repository", "."]
+    },
+
+    "memory": {
+      "_comment": "Grafo de conhecimento persistente para decisões de design e linguagem ubíqua do domínio NovaTech. MEMORY_FILE_PATH aponta para .mcp/memory.jsonl — versionado junto ao repositório para que o grafo acompanhe o código. Não expõe filesystem nem git: memória é o único recurso desta instância.",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": {
+        "MEMORY_FILE_PATH": ".mcp/memory.jsonl"
+      }
+    }
+
+  }
+}
