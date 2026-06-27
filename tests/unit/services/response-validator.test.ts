@@ -74,6 +74,26 @@ describe('validateResponse', () => {
   });
 
   // -------------------------------------------------------------------------
+  describe('imutabilidade do FALLBACK_RESPONSE (regressão BUG-02)', () => {
+    it('tentativa de mutar answer do fallback não afeta chamada subsequente', () => {
+      const first = validateResponse('json inválido');
+      // Tentativa de mutação — lança TypeError em strict mode; ignorada em outros.
+      try { (first.response as Record<string, unknown>).answer = 'HACKED'; } catch { /* esperado */ }
+
+      const second = validateResponse('json inválido');
+      expect(second.response.answer).toBe(FALLBACK_RESPONSE.answer);
+    });
+
+    it('tentativa de mutar source_document.id do fallback não afeta chamada subsequente', () => {
+      const first = validateResponse('json inválido');
+      try { (first.response.source_document as Record<string, unknown>).id = 'HACKED'; } catch { /* esperado */ }
+
+      const second = validateResponse('json inválido');
+      expect(second.response.source_document.id).toBe('N/A');
+    });
+  });
+
+  // -------------------------------------------------------------------------
   describe('guardrail 4.1 — source_document obrigatório', () => {
     it('retorna fallback quando source_document está ausente', () => {
       const json = JSON.stringify({ answer: 'Resposta sem fonte.', confidence_score: 0.8 });

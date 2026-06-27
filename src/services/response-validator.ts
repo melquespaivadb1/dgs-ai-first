@@ -54,13 +54,17 @@ export const AssistantResponseSchema = z
 export type SourceDocument = z.infer<typeof SourceDocumentSchema>;
 export type AssistantResponse = z.infer<typeof AssistantResponseSchema>;
 
-export const FALLBACK_RESPONSE = {
+// Object.freeze aplicado em ambos os níveis: o spread raso não protege
+// source_document, pois copia a referência — qualquer caller ainda mutaria
+// o objeto aninhado globalmente. O freeze na definição é preferível a
+// spreads em cada site de retorno (manutenção mais frágil).
+export const FALLBACK_RESPONSE = Object.freeze({
   answer:
     'Não foi possível processar sua consulta com uma fonte verificada. ' +
     'Por favor, consulte a documentação oficial ou entre em contato com o time responsável.',
-  source_document: { id: 'N/A' },
+  source_document: Object.freeze({ id: 'N/A' }),
   confidence_score: 0,
-} satisfies AssistantResponse;
+}) satisfies AssistantResponse;
 
 // ---------------------------------------------------------------------------
 // Validator — única entrada pública para quem quer validar uma completion.
