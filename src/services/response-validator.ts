@@ -23,7 +23,7 @@ export const AssistantResponseSchema = z
     // pelo processo padrão. Qualquer resposta que mencione os dois temas sem a
     // negativa obrigatória é bloqueada aqui, antes de chegar ao atendente.
     const lower = data.answer.toLowerCase();
-    const mentionsDangerousCargo = lower.includes('carga perigosa');
+    const mentionsDangerousCargo = /cargas? perigosas?/.test(lower);
     const mentionsReturn = /devolu|devolver|devolvid/.test(lower);
 
     if (!mentionsDangerousCargo || !mentionsReturn) return;

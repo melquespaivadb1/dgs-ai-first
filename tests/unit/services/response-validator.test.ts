@@ -130,6 +130,17 @@ describe('validateResponse', () => {
       expect(validateResponse(json).validated).toBe(false);
     });
 
+    // Regressão BUG-01: includes('carga perigosa') não capturava o plural.
+    // Corrigido com /cargas? perigosas?/.test(lower).
+    it('bloqueia "cargas perigosas" no plural sem negativa (regressão BUG-01)', () => {
+      const json = makeCompletion({
+        answer: 'Cargas perigosas podem ser devolvidas pelo processo padrão.',
+        source_document: { id: 'POL-001', section: '§3.2' },
+      });
+
+      expect(validateResponse(json).validated).toBe(false);
+    });
+
     it('passa quando resposta traz "não são elegíveis" como negativa', () => {
       const json = makeCompletion({
         answer:
