@@ -8,6 +8,9 @@ const ALL_VARS: Record<string, string> = {
   AZURE_SEARCH_ENDPOINT: 'https://search.example.com',
   AZURE_SEARCH_KEY: 'search-key',
   AZURE_SEARCH_INDEX_NAME: 'my-index',
+  COSMOS_CONNECTION_STRING: 'AccountEndpoint=https://mock.documents.azure.com:443/;AccountKey=bW9jaw==;',
+  COSMOS_DATABASE_NAME: 'novatech',
+  COSMOS_CONTAINER_FEEDBACKS: 'feedbacks',
 };
 
 describe('config', () => {
@@ -39,5 +42,8 @@ describe('config', () => {
     expect(config.azureSearchEndpoint).toBe(ALL_VARS.AZURE_SEARCH_ENDPOINT);
     expect(config.azureSearchKey).toBe(ALL_VARS.AZURE_SEARCH_KEY);
     expect(config.azureSearchIndexName).toBe(ALL_VARS.AZURE_SEARCH_INDEX_NAME);
+    expect(config.cosmosConnectionString).toBe(ALL_VARS.COSMOS_CONNECTION_STRING);
+    expect(config.cosmosDatabaseName).toBe(ALL_VARS.COSMOS_DATABASE_NAME);
+    expect(config.cosmosContainerFeedbacks).toBe(ALL_VARS.COSMOS_CONTAINER_FEEDBACKS);
   });
 });

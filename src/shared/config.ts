@@ -14,4 +14,7 @@ export const config = {
   azureSearchEndpoint: requireEnv('AZURE_SEARCH_ENDPOINT'),
   azureSearchKey: requireEnv('AZURE_SEARCH_KEY'),
   azureSearchIndexName: requireEnv('AZURE_SEARCH_INDEX_NAME'),
+  cosmosConnectionString: requireEnv('COSMOS_CONNECTION_STRING'),
+  cosmosDatabaseName: requireEnv('COSMOS_DATABASE_NAME'),
+  cosmosContainerFeedbacks: requireEnv('COSMOS_CONTAINER_FEEDBACKS'),
 };
